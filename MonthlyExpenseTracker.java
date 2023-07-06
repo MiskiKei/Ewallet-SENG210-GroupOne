@@ -1,37 +1,83 @@
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class MonthlyExpenseTracker {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        // Get the number of expenses for the month
-        System.out.print("Enter the number of expenses for the month: ");
-        int numExpenses = scanner.nextInt();
-        scanner.nextLine(); 
-        
-        double totalExpense = 0.0;
-        
-        // Details of each expense
-        for (int i = 1; i <= numExpenses; i++) {
-            System.out.println("Expense #" + i);
-            
-            // Expense description
-            System.out.print("Enter the expense description: ");
-            String description = scanner.nextLine();
-            
-            // Expense amount
-            System.out.print("Enter the expense amount: ");
-            double amount = scanner.nextDouble();
-            scanner.nextLine();
-            
-            totalExpense += amount;
-            
-            System.out.println(); // Add blank space so it looks nice
+public class MonthlyExpenseTracker extends JFrame implements ActionListener {
+    private JTextField numExpensesField;
+    private JButton calculateButton;
+    public double totalExpense;
+
+    public double getTotalExpense() {
+        return totalExpense;
+    }
+
+    public MonthlyExpenseTracker() {
+        setTitle("Monthly Expense Tracker");
+
+        // Number of Expenses Label and Text Field
+        JLabel numExpensesLabel = new JLabel("Number of Expenses:");
+        numExpensesField = new JTextField(10);
+
+        // Calculate Button
+        calculateButton = new JButton("Calculate");
+        calculateButton.addActionListener(this);
+
+        // Layout
+        setLayout(new FlowLayout());
+        add(numExpensesLabel);
+        add(numExpensesField);
+        add(calculateButton);
+
+        pack();
+        setSize(850, 100);
+        setLocationRelativeTo(null);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == calculateButton) {
+            calculateExpenses();
+            generateReport();
         }
-        
-        // Print the total monthly expense
-        System.out.println("Total Monthly Expense: $" + totalExpense);
-        
-        scanner.close();
+    }
+
+    public void calculateExpenses() {
+        int numExpenses = Integer.parseInt(numExpensesField.getText());
+        totalExpense = 0.0; // Assign the value to the member variable
+
+        // Amount of each expense
+        for (int i = 1; i <= numExpenses; i++) {
+            String amountStr = JOptionPane.showInputDialog(null, "Enter the expense amount for expense #" + i + ":", "Expense Amount", JOptionPane.PLAIN_MESSAGE);
+
+            double amount = Double.parseDouble(amountStr);
+
+            totalExpense += amount;
+        }
+    }
+
+    public void generateReport() {
+        StringBuilder report = new StringBuilder();
+        report.append("Monthly Expense Report:\n");
+        report.append("----------------------\n");
+
+        int numExpenses = Integer.parseInt(numExpensesField.getText());
+
+        // Amount of each expense
+        for (int i = 1; i <= numExpenses; i++) {
+            double amount = totalExpense / numExpenses;
+            report.append("Expense #" + i + ": $" + amount + "\n");
+        }
+
+        // Total Expense
+        report.append("----------------------\n");
+        report.append("Total Monthly Expense: $" + getTotalExpense() + "\n");
+        report.append("----------------------\n");
+
+        JOptionPane.showMessageDialog(this, report.toString(), "Expense Report", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(MonthlyExpenseTracker::new);
     }
 }
+
