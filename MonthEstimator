@@ -3,17 +3,18 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class MonthEstimator {
-    private JFrame frame;
+    public JFrame frame;
     private JTextField itemField;
     private JTextField priceField;
     private JLabel resultLabel;
+    private MonthlySavings monthlySavings;
 
-    public MonthEstimator() {
+    public MonthEstimator(MonthlyIncomeTracker incomeTracker, MonthlyExpenseTracker expenseTracker) {
+        MonthlySavings monthlySavings = new MonthlySavings(incomeTracker, expenseTracker);
+
         frame = new JFrame("Savings Estimate");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         frame.setLayout(new FlowLayout());
-
-
 
         JLabel itemLabel = new JLabel("Item: ");
         itemField = new JTextField(10);
@@ -31,7 +32,6 @@ public class MonthEstimator {
         frame.add(resultLabel);
 
         frame.pack();
-        frame.setVisible(true);
         frame.setSize(850, 100);
         frame.setLocationRelativeTo(null);
     }
@@ -41,31 +41,24 @@ public class MonthEstimator {
         public void actionPerformed(ActionEvent e) {
             String item = itemField.getText();
             double price = Double.parseDouble(priceField.getText());
-            double monthlySavings = MonthlySavings.getSavingsAmount();
-            int months = calculateMonthsToSave(price, monthlySavings);
-            resultLabel.setText("It will take " + months + " months to save up for " + item +".");
+            double monthlySavingsAmount = monthlySavings.getSavingsAmount();
+            int months = calculateMonthsToSave(price, monthlySavingsAmount);
+            resultLabel.setText("It will take " + months + " months to save up for " + item + ".");
         }
     }
 
     public static int calculateMonthsToSave(double price, double monthlySavings) {
+        if (monthlySavings <= 0) {
+            return -1; // Handle invalid savings amount
+        }
+
         double totalMonths = price / monthlySavings;
         return (int) Math.ceil(totalMonths);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MonthEstimator();
-            }
+        SwingUtilities.invokeLater(() -> {
+            new MainFrame();
         });
     }
 }
-//This is the are that needs updating
-class MonthlySavings {
-    public static double getSavingsAmount() {
-        // Logic to fetch the monthly savings amount from an external class or data source
-        return 900.0; // Example monthly savings amount
-    }
-}
-
-
