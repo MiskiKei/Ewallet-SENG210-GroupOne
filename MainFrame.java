@@ -7,6 +7,8 @@ public class MainFrame extends JFrame {
     private JButton incomeTrackerButton;
     private JButton expenseTrackerButton;
     private JButton monthEstimatorButton;
+    private JButton currencyChangeButton;
+    private JButton reportExporterButton;
 
     public MainFrame() {
         setTitle("Main Frame");
@@ -36,10 +38,28 @@ public class MainFrame extends JFrame {
             }
         });
 
+        currencyChangeButton = new JButton("Currency Change");
+        currencyChangeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                closeCurrentFrame(); // Close the current frame
+                openCurrencyChange();
+            }
+        });
+
+        reportExporterButton = new JButton("Report Exporter");
+        reportExporterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                closeCurrentFrame(); // Close the current frame
+                openReportExporter();
+            }
+        });
+
         setLayout(new FlowLayout());
         add(incomeTrackerButton);
         add(expenseTrackerButton);
         add(monthEstimatorButton);
+        add(currencyChangeButton);
+        add(reportExporterButton);
 
         pack();
         setVisible(true);
@@ -84,6 +104,18 @@ public class MainFrame extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Please open Income Tracker and Expense Tracker first.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void openCurrencyChange() {
+        DropDownCurrencyChange currencyChange = new DropDownCurrencyChange();
+        currencyChange.setVisible(true);
+        currentFrame = currencyChange; // Set the current frame as the opened frame
+    }
+
+    private void openReportExporter() {
+        ReportExporter reportExporter = new ReportExporter();
+        reportExporter.setVisible(true);
+        currentFrame = reportExporter; // Set the current frame as the opened frame
     }
 
     public static void main(String[] args) {
