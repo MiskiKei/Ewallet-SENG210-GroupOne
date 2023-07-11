@@ -8,10 +8,13 @@ public class MainFrame extends JFrame {
     private JButton expenseTrackerButton;
     private JButton monthEstimatorButton;
     private JButton currencyChangeButton;
-    private JButton reportExporterButton;
+    private JButton summaryGeneratorButton;
+
+    private MonthlyIncomeTracker incomeTracker;
+    private MonthlyExpenseTracker expenseTracker;
 
     public MainFrame() {
-        setTitle("Main Frame");
+        setTitle("Wallet");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         incomeTrackerButton = new JButton("Income Tracker");
@@ -46,11 +49,10 @@ public class MainFrame extends JFrame {
             }
         });
 
-        reportExporterButton = new JButton("Report Exporter");
-        reportExporterButton.addActionListener(new ActionListener() {
+        summaryGeneratorButton = new JButton("Summary");
+        summaryGeneratorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                closeCurrentFrame(); // Close the current frame
-                openReportExporter();
+                generateSummary();
             }
         });
 
@@ -59,7 +61,7 @@ public class MainFrame extends JFrame {
         add(expenseTrackerButton);
         add(monthEstimatorButton);
         add(currencyChangeButton);
-        add(reportExporterButton);
+        add(summaryGeneratorButton);
 
         pack();
         setVisible(true);
@@ -73,13 +75,13 @@ public class MainFrame extends JFrame {
     }
 
     private void openIncomeTracker() {
-        MonthlyIncomeTracker incomeTracker = new MonthlyIncomeTracker();
+        incomeTracker = new MonthlyIncomeTracker();
         incomeTracker.setVisible(true);
         currentFrame = incomeTracker; // Set the current frame as the opened frame
     }
 
     private void openExpenseTracker() {
-        MonthlyExpenseTracker expenseTracker = new MonthlyExpenseTracker();
+        expenseTracker = new MonthlyExpenseTracker();
         expenseTracker.setVisible(true);
         currentFrame = expenseTracker; // Set the current frame as the opened frame
     }
@@ -112,10 +114,15 @@ public class MainFrame extends JFrame {
         currentFrame = currencyChange; // Set the current frame as the opened frame
     }
 
-    private void openReportExporter() {
-        ReportExporter reportExporter = new ReportExporter();
-        reportExporter.setVisible(true);
-        currentFrame = reportExporter; // Set the current frame as the opened frame
+    private void generateSummary() {
+        if (incomeTracker != null && expenseTracker != null) {
+            closeCurrentFrame(); // Close the current frame
+            SummaryGenerator summaryGenerator = new SummaryGenerator(incomeTracker, expenseTracker);
+            summaryGenerator.setVisible(true);
+            currentFrame = summaryGenerator; // Set the current frame as the opened frame
+        } else {
+            JOptionPane.showMessageDialog(this, "Please open Income Tracker and Expense Tracker first.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
