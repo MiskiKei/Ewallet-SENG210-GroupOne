@@ -148,6 +148,8 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
         report.append("Total Monthly Expense: $" + totalExpense + "\n");
         report.append("----------------------\n");
 
+        JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
+
         return report.toString();
     }
 
