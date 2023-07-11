@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MonthlyIncomeTracker extends JFrame implements ActionListener {
     private JTextField incomeField;
@@ -13,7 +18,7 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
     private JComboBox<String> incomeTypeComboBox;
     public ArrayList<IncomeEntry> incomeEntries;
 
-    private static class IncomeEntry {
+    static class IncomeEntry {
         private String month;
         private String type;
         private double amount;
@@ -39,7 +44,6 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
 
     public MonthlyIncomeTracker() {
         setTitle("Monthly Income Tracker");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         incomeEntries = new ArrayList<>();
 
@@ -66,6 +70,14 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         JButton reportButton = new JButton("Generate Report");
         reportButton.addActionListener(this);
 
+        // Read File Button
+        JButton fileButton = new JButton("Read File");
+        fileButton.addActionListener(this);
+
+        // Export Button
+        JButton exportButton = new JButton("Export Report");
+        exportButton.addActionListener(this);
+
         // Layout
         setLayout(new FlowLayout());
         add(incomeLabel);
@@ -75,7 +87,9 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         add(monthLabel);
         add(monthComboBox);
         add(addButton);
+        add(fileButton);
         add(reportButton);
+        add(exportButton);
 
         pack();
         setVisible(true);
@@ -95,14 +109,40 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
 
             incomeEntries.add(new IncomeEntry(month, incomeType, income));
 
-            JOptionPane.showMessageDialog(this, "Income added successfully!", "", JOptionPane.PLAIN_MESSAGE);
             incomeField.setText("");
         } else if (e.getActionCommand().equals("Generate Report")) {
             generateReport();
+        } else if (e.getActionCommand().equals("Read File")){
+            readIncomeFile();
+        } else if (e.getActionCommand().equals("Export Report")) {
+            exportReport();
         }
     }
 
-    public void generateReport() {
+    public void readIncomeFile() {
+        String month;
+        String incomeType;
+        String income;
+
+        try {
+            File file = new File("IncomeFile");
+            Scanner scnr = new Scanner(file);
+            scnr.useDelimiter(",");
+            while (scnr.hasNextLine()) {
+                income = scnr.next();
+                incomeType = scnr.next();
+                month = scnr.next();
+                incomeEntries.add(new IncomeEntry(month, incomeType, Double.parseDouble(income)));
+            }
+            System.out.println("Success!");
+            scnr.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public StringBuilder generateReport() {
         StringBuilder report = new StringBuilder();
         Map<String, Map<String, Double>> monthIncomeMap = new TreeMap<>();
         Map<String, Double> incomeTypeTotalMap = new HashMap<>();
@@ -157,7 +197,25 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         report.append("----------------------\n");
         report.append("Overall Total Income: $").append(overallTotalIncome).append("\n");
         report.append("----------------------\n");
-        JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
+
+        return report;
+    }
+
+    public void exportReport() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Report");
+        int userSelection = fileChooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            try {
+                FileWriter writer = new FileWriter(fileToSave);
+                writer.write(generateReport().toString());
+                writer.close();
+                JOptionPane.showMessageDialog(this, "Report exported successfully.", "Export Report", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error exporting report.", "Export Report", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public static void main(String[] args) {
