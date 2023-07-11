@@ -198,6 +198,10 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         report.append("Overall Total Income: $").append(overallTotalIncome).append("\n");
         report.append("----------------------\n");
 
+        JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
+
+
+
         return report;
     }
 
