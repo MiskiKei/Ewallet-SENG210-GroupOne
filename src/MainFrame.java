@@ -108,6 +108,7 @@ public class MainFrame extends JFrame {
         }
     }
 
+    
     private void openCurrencyChange() {
         DropDownCurrencyChange currencyChange = new DropDownCurrencyChange();
         currencyChange.setVisible(true);
