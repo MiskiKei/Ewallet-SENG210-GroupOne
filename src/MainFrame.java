@@ -108,6 +108,7 @@ public class MainFrame extends JFrame {
         }
     }
 
+    
     private void openCurrencyChange() {
         DropDownCurrencyChange currencyChange = new DropDownCurrencyChange();
         currencyChange.setVisible(true);
@@ -125,11 +126,14 @@ public class MainFrame extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame();
-            }
-        });
+    public static class Main {
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    new MainFrame();
+                }
+            });
+        }
+
     }
 }
