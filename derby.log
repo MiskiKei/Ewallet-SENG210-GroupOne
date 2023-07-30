@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Jul 30 14:53:33 EDT 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0189-a826-0c0b-00000f4a9f38 
+on database directory C:\Users\Damian\git\Ewallet-SENG210-GroupOne\data\myDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@22d8cfe0 
+Loaded from file:/C:/Users/Damian/Desktop/db-derby-10.13.1.1-bin/db-derby-10.13.1.1-bin/lib/derby.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=17.0.5+8
+user.dir=C:\Users\Damian\git\Ewallet-SENG210-GroupOne
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
