@@ -17,6 +17,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
     private JButton addExpenseButton;
     private JButton generateReportButton;
     private JButton readFileButton;
+    private JButton generateReportTypeButton;
     private JButton exportReportButton;
     public List<Expense> expenses;
     public double totalExpense;
@@ -30,7 +31,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
         expenseAmountField = new JTextField(10);
 
         // Expense Description Label and Text Field
-        JLabel expenseDescriptionLabel = new JLabel("Expense Description:");
+        JLabel expenseDescriptionLabel = new JLabel("Expense Type:");
         expenseDescriptionField = new JTextField(20);
 
         // Add Expense Button
@@ -44,6 +45,11 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
         // Generate Report Button
         generateReportButton = new JButton("Generate Report");
         generateReportButton.addActionListener(this);
+        
+     // Generate Report By type Button
+        generateReportTypeButton = new JButton("By Type");
+        generateReportTypeButton.addActionListener(this);
+
 
         // Export Report Button
         exportReportButton = new JButton("Export Report");
@@ -58,6 +64,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
         add(addExpenseButton);
         add(readFileButton);
         add(generateReportButton);
+        add(generateReportTypeButton);
         add(exportReportButton);
 
         pack();
@@ -70,6 +77,8 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
             addExpense();
         } else if (e.getSource() == generateReportButton) {
             generateReport();
+        } else if (e.getSource() == generateReportTypeButton) {
+            generateReportByType();
         } else if (e.getSource() == readFileButton) {
             readExpenseFile();
         } else if (e.getSource() == exportReportButton) {
@@ -85,7 +94,14 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Please enter both the amount and description of the expense.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+        if (!description.equalsIgnoreCase("Car Expenses") 
+                && !description.equalsIgnoreCase("Groceries")
+                && !description.equalsIgnoreCase("Recreational")
+                && !description.equalsIgnoreCase("Bills")) {
+            JOptionPane.showMessageDialog(this, "Invalid expense type. Please enter 'Car Expenses', 'Recreational', 'Groceries', or 'Bills'.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         double amount;
         try {
             amount = Double.parseDouble(amountStr);
@@ -94,10 +110,12 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
             return;
         }
 
-        Expense expense = new Expense(amount, description);
-        expenses.add(expense);
-        totalExpense += amount;
+        //Expense expense = new Expense(amount, description);
+        //expenses.add(expense);
+        //totalExpense += amount;
 
+        SQLStatements.insertExpense(amount, description);
+        
         expenseAmountField.setText("");
         expenseDescriptionField.setText("");
     }
@@ -134,13 +152,65 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
     }
 
     public String generateReport() {
+    	List rowValues = SQLStatements.expenseSize();
+    	int rowSize = rowValues.size();
         StringBuilder report = new StringBuilder();
         report.append("Monthly Expense Report:\n");
         report.append("----------------------\n");
+        totalExpense = 0;
+        for (int i = 0; i < rowSize; i++) {
+            Object tempVar = rowValues.get(i);
+            String tempString = tempVar.toString();
+        	Object[] rowresults = SQLStatements.selectExpense(tempString);
+        	String objType = (String) rowresults[0];
+        	String objAmount = (String) rowresults[1];
+        	double addAmount = Double.parseDouble(objAmount);
+        	totalExpense += addAmount;
+        	String objUser = (String) rowresults[2];
+        	//Expense expense = expenses.get(i);
+            report.append("Expense Type: " + objType + " ($" + objAmount + ")\n");
+        }
 
-        for (int i = 0; i < expenses.size(); i++) {
-            Expense expense = expenses.get(i);
-            report.append("Expense Description: " + expense.getDescription() + " ($" + expense.getAmount() + ")\n");
+        // Total Expense
+        report.append("----------------------\n");
+        report.append("Expense Report by Type: $" + totalExpense + "\n");
+        report.append("----------------------\n");
+
+        JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
+
+        return report.toString();
+    }
+    
+    
+    public String generateReportByType() {
+        String description = expenseDescriptionField.getText();
+
+        
+        if (!description.equalsIgnoreCase("Car Expenses") 
+                && !description.equalsIgnoreCase("Groceries")
+                && !description.equalsIgnoreCase("Recreational")
+                && !description.equalsIgnoreCase("Bills")) {
+            JOptionPane.showMessageDialog(this, "Invalid expense type. Please enter 'Car Expenses', 'Recreational', 'Groceries', or 'Bills', into the Expense type field.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        }
+    	
+    	
+    	List rowValues = SQLStatements.expenseSizebyType(description);
+    	int rowSize = rowValues.size();
+        StringBuilder report = new StringBuilder();
+        report.append("Expense Report by Type:\n");
+        report.append("----------------------\n");
+        totalExpense = 0;
+        for (int i = 0; i < rowSize; i++) {
+            Object tempVar = rowValues.get(i);
+            String tempString = tempVar.toString();
+        	Object[] rowresults = SQLStatements.selectExpenseByType(tempString);
+        	String objType = (String) rowresults[0];
+        	String objAmount = (String) rowresults[1];
+        	double addAmount = Double.parseDouble(objAmount);
+        	totalExpense += addAmount;
+        	String objUser = (String) rowresults[2];
+        	//Expense expense = expenses.get(i);
+            report.append("Expense Type: " + objType + " ($" + objAmount + ")\n");
         }
 
         // Total Expense

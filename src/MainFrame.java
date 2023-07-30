@@ -14,6 +14,8 @@ public class MainFrame extends JFrame {
     private MonthlyExpenseTracker expenseTracker;
 
     public MainFrame() {
+    	SQLStatements Database = new SQLStatements();
+    	Database.createDatabase();
         setTitle("Wallet");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -86,7 +88,7 @@ public class MainFrame extends JFrame {
         currentFrame = expenseTracker; // Set the current frame as the opened frame
     }
 
-    private void openMonthEstimator() {
+    private void openMonthEstimator() { 
         MonthlyIncomeTracker incomeTracker = null;
         MonthlyExpenseTracker expenseTracker = null;
 
