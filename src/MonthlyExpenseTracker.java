@@ -122,7 +122,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
 
     public void readExpenseFile() {
         try {
-            File file = new File("ExpenseFile");
+            File file = new File("C:/Users/Damian/git/Ewallet-SENG210-GroupOne/ExpenseFile.txt");
             Scanner scnr = new Scanner(file);
             scnr.useDelimiter(",");
 
@@ -133,10 +133,14 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
                 if (parts.length == 2) {
                     double amount = Double.parseDouble(parts[0].trim());
                     String description = parts[1].trim();
-
-                    Expense expense = new Expense(amount, description);
-                    expenses.add(expense);
+                    
+                    
+                    SQLStatements.insertExpense(amount, description);
+                    
+                    
+                   
                     totalExpense += amount;
+                    System.out.println("done");
                 } else {
                     System.out.println("Invalid line: " + line);
                 }
