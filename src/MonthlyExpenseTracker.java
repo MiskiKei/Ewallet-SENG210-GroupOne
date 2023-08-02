@@ -173,7 +173,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
 
         // Total Expense
         report.append("----------------------\n");
-        report.append("Expense Report by Type: $" + totalExpense + "\n");
+        report.append("Expense Report Total: $" + totalExpense + "\n");
         report.append("----------------------\n");
 
         JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
@@ -215,7 +215,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
 
         // Total Expense
         report.append("----------------------\n");
-        report.append("Total Monthly Expense: $" + totalExpense + "\n");
+        report.append("Total Expense: $" + totalExpense + "\n");
         report.append("----------------------\n");
 
         JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
