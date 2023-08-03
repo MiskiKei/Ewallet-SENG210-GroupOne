@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.File;
@@ -45,7 +47,7 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
     public MonthlyIncomeTracker() {
         setTitle("Monthly Income Tracker");
 
-        incomeEntries = new ArrayList<>();
+        incomeEntries = new ArrayList<>(); 
 
         // Income Label and Text Field
         JLabel incomeLabel = new JLabel("Enter Income:");
@@ -73,6 +75,10 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         // Read File Button
         JButton fileButton = new JButton("Read File");
         fileButton.addActionListener(this);
+        
+        // Generate Report By type Button
+        JButton generateReportTypeButton = new JButton("Report By Type");
+        generateReportTypeButton.addActionListener(this);
 
         // Export Button
         JButton exportButton = new JButton("Export Report");
@@ -89,7 +95,9 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         add(addButton);
         add(fileButton);
         add(reportButton);
+        add(generateReportTypeButton);
         add(exportButton);
+       
 
         pack();
         setVisible(true);
@@ -97,29 +105,49 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) { ///ADDING A TYPE OF INCOME
         if (e.getActionCommand().equals("Add Income")) {
-            String incomeText = incomeField.getText();
-            double income = 0.0;
-            if (!incomeText.isEmpty()) {
-                income = Double.parseDouble(incomeText);
-            }
-            String month = (String) monthComboBox.getSelectedItem();
-            String incomeType = (String) incomeTypeComboBox.getSelectedItem();
-
-            incomeEntries.add(new IncomeEntry(month, incomeType, income));
-
-            incomeField.setText("");
+        	addIncome();
         } else if (e.getActionCommand().equals("Generate Report")) {
             generateReport();
         } else if (e.getActionCommand().equals("Read File")){
             readIncomeFile();
         } else if (e.getActionCommand().equals("Export Report")) {
             exportReport();
+        } else if (e.getActionCommand().equals("Report By Type")){
+        	generateIncomeReportByType(); ///CHANGEEEEEEE
         }
     }
 
-    public void readIncomeFile() {
+    private void addIncome() {
+        String incomeText = incomeField.getText();
+        String month = (String) monthComboBox.getSelectedItem();
+        String incomeType = (String) incomeTypeComboBox.getSelectedItem();
+         
+        if (incomeText.isEmpty()) { // Check if incomeText is empty
+            JOptionPane.showMessageDialog(this, "Please enter a valid amount for income", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        double amount;
+        try {
+            amount = Double.parseDouble(incomeText);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid income amount. Please enter a valid number.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return;
+        }   
+        
+        SQLStatements.insertIncome(amount, incomeType, month); 
+        
+        System.out.println("Income added successfully to the database!");
+        
+        JOptionPane.showMessageDialog(this, "Income Was Successfully Added!");
+
+        incomeField.setText("");		
+    }
+
+
+	public void readIncomeFile() {
         String month;
         String incomeType;
         String income;
@@ -142,68 +170,69 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         }
     }
 
-    public StringBuilder generateReport() {
-        StringBuilder report = new StringBuilder();
-        Map<String, Map<String, Double>> monthIncomeMap = new TreeMap<>();
-        Map<String, Double> incomeTypeTotalMap = new HashMap<>();
-        double overallTotalIncome = 0.0;
+    public String generateReport() {
+        
+    	List<Object[]> allIncomeData = SQLStatements.selectAllIncome(); // Fetch all income data
+    	StringBuilder report = new StringBuilder();
+    	report.append("Monthly Income Report:\n");
+    	report.append("--------------------------------------------------\n");
+    	double totalIncome = 0;
 
-        report.append("Monthly Income Report:\n");
-        report.append("----------------------\n");
+    	for (Object[] rowResults : allIncomeData) {
+    	    String objType = (String) rowResults[0];
+    	    String objAmount = (String) rowResults[1];
+    	    String objMonth = (String) rowResults[2];
+    	    double addAmount = Double.parseDouble(objAmount);
+    	    totalIncome += addAmount;
+    	    String objUser = (String) rowResults[3];
 
-        for (IncomeEntry entry : incomeEntries) {
-            String month = entry.getMonth();
-            String incomeType = entry.getType();
-            double income = entry.getAmount();
+    	    report.append("Income Type: " + objType + " ($" + objAmount + ") - Month: " + objMonth + " - User: " + objUser + "\n");
+    	}
 
-            if (!monthIncomeMap.containsKey(month)) {
-                monthIncomeMap.put(month, new HashMap<>());
-            }
+    	// Total Income
+    	report.append("--------------------------------------------------\n");
+    	report.append("Income Report Total: $" + totalIncome + "\n");
+    	report.append("--------------------------------------------------\n");
 
-            Map<String, Double> incomeMap = monthIncomeMap.get(month);
-            double totalIncome = incomeMap.getOrDefault(incomeType, 0.0) + income;
-            incomeMap.put(incomeType, totalIncome);
+    	JOptionPane.showMessageDialog(this, report.toString(), "Monthly Income Report", JOptionPane.PLAIN_MESSAGE);
 
-            double typeTotalIncome = incomeTypeTotalMap.getOrDefault(incomeType, 0.0) + income;
-            incomeTypeTotalMap.put(incomeType, typeTotalIncome);
+    	return report.toString();
 
-            overallTotalIncome += income;
-        }
-
-        for (Map.Entry<String, Map<String, Double>> monthEntry : monthIncomeMap.entrySet()) {
-            String month = monthEntry.getKey();
-            Map<String, Double> incomeMap = monthEntry.getValue();
-
-            report.append(month).append(":\n");
-
-            for (Map.Entry<String, Double> incomeEntry : incomeMap.entrySet()) {
-                String incomeType = incomeEntry.getKey();
-                double totalIncome = incomeEntry.getValue();
-
-                report.append("  - ").append(incomeType).append(": $").append(totalIncome).append("\n");
-            }
-
-        }
-
-        report.append("----------------------\n");
-
-
-        for (Map.Entry<String, Double> incomeTypeEntry : incomeTypeTotalMap.entrySet()) {
-            String incomeType = incomeTypeEntry.getKey();
-            double typeTotalIncome = incomeTypeEntry.getValue();
-
-            report.append(incomeType).append(" Total: $").append(typeTotalIncome).append("\n");
-        }
-        report.append("----------------------\n");
-        report.append("Overall Total Income: $").append(overallTotalIncome).append("\n");
-        report.append("----------------------\n");
-
-        JOptionPane.showMessageDialog(this, report.toString(), "", JOptionPane.PLAIN_MESSAGE);
-
-
-
-        return report;
     }
+    
+    public String generateIncomeReportByType() {
+        String incomeType = (String) incomeTypeComboBox.getSelectedItem();
+        List<Object[]> rowValues = SQLStatements.selectIncomeByType(incomeType); // Assuming selectIncomeByType returns List<Object[]>
+        int rowSize = rowValues.size(); //Number of rows 
+
+        StringBuilder report = new StringBuilder();
+        report.append("Income Report by Type: \n");
+        report.append("--------------------------------------------------\n");
+        double totalIncome = 0;
+
+        for (Object[] rowresults : rowValues) { 
+            if (rowresults != null) { // Check if there is data for the income type
+                String objType = (String) rowresults[0];
+                String objAmount = (String) rowresults[1];
+                double addAmount = Double.parseDouble(objAmount);
+                totalIncome += addAmount;
+                String objMonth = (String) rowresults[2];
+                String objUser = (String) rowresults[3];
+                report.append("Income Type: " + objType + " ($" + objAmount + ") - Month: " + objMonth + " - User: " + objUser + "\n");
+            }
+        }
+
+        // Total Income
+        report.append("--------------------------------------------------\n");
+        report.append("Total Income: " + ": $" + totalIncome + "\n");
+        report.append("--------------------------------------------------\n");
+
+        JOptionPane.showMessageDialog(this, report.toString(), "Income Report", JOptionPane.PLAIN_MESSAGE);
+        return report.toString();
+    }
+
+
+
 
     public void exportReport() {
         JFileChooser fileChooser = new JFileChooser();

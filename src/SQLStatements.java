@@ -38,6 +38,7 @@ public class SQLStatements {
             stmt.execute("CREATE TABLE expense_type (typeid INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, type VARCHAR(50))");
             stmt.execute("CREATE TABLE expense (Expense_id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, amount DECIMAL(10, 2), typeid INT, userid VARCHAR(255), FOREIGN KEY (typeid) REFERENCES expense_type(typeid))");
             stmt.execute("INSERT INTO expense_type (type) VALUES ('Car Expenses'), ('Recreational'), ('Groceries'), ('Bills')");
+            stmt.execute("INSERT INTO Income_type (type) VALUES ('Salary'), ('Bonus'), ('Investments'), ('Other')");
             
             System.out.println("New database created");
             //create other tables here.
@@ -208,7 +209,86 @@ public class SQLStatements {
         return null;
 	}
 
-	    
+	
+	public static void insertIncome(double amount, String type, String month) {
+	    try {
+	       tableName = "Income";
+
+	        if (type.equals("Salary")) {
+	        	typeID = 1;
+	        } else if (type.equals("Bonus")) {
+	            typeID = 2;
+	        } else if (type.equals("Investments")) {
+	            typeID = 3;
+	        } else if (type.equals("Other")) {
+	            typeID = 4;
+	        }
+
+	        stmt = conn.createStatement();
+	        stmt.execute("INSERT INTO " + tableName + " (amount, typeid, month, userid) VALUES (" + amount + ", " + typeID + ", '" + month + "', 'USER')");
+	        stmt.close();
+	        System.out.println("Income added successfully.");
+	    } catch (SQLException sqlExcept) {
+	        sqlExcept.printStackTrace();
+	        System.out.println("Failed to add income.");
+	    }
+	}
+	
+	
+	public static List<Object[]> selectAllIncome() {
+	    List<Object[]> incomeData = new ArrayList<>();
+	    try {
+	        stmt = conn.createStatement();
+	        String tableName = "Income";
+	        String query = "SELECT it.type, inc.amount, inc.month, inc.userid FROM income inc LEFT JOIN income_type it ON inc.typeid = it.typeid"; // Removed "AS in" alias
+	        System.out.println(query);
+	        ResultSet results = stmt.executeQuery(query);
+	        while (results.next()) {
+	            String typeName = results.getString(1);
+	            String amountName = results.getString(2);
+	            String monthName = results.getString(3);
+	            String userName = results.getString(4);
+	            Object[] rowResults = new Object[] { typeName, amountName, monthName, userName };
+	            incomeData.add(rowResults);
+	        }
+	        results.close();
+	        stmt.close();
+	    } catch (SQLException sqlExcept) {
+	        sqlExcept.printStackTrace();
+	    }
+	    return incomeData;
+	}
+
+
+	
+	public static List<Object[]> selectIncomeByType(String type) {
+	    List<Object[]> incomeData = new ArrayList<>();
+	    try {
+	        stmt = conn.createStatement();
+	        String tableName = "Income";
+	        String query = "SELECT it.type, inc.amount, inc.month, inc.userid FROM income inc LEFT JOIN income_type it ON inc.typeid = it.typeid WHERE it.type = '" + type + "'";
+	        System.out.println(query);
+	        ResultSet results = stmt.executeQuery(query);
+	        while (results.next()) {
+	            String typeName = results.getString(1);
+	            String amountName = results.getString(2);
+	            String monthName = results.getString(3);
+	            String userName = results.getString(4);
+	            Object[] rowResults = new Object[] { typeName, amountName, monthName, userName };
+	            incomeData.add(rowResults); // Add the rowResults array to the incomeData list
+	        }
+	        results.close();
+	        stmt.close();
+	    } catch (SQLException sqlExcept) {
+	        sqlExcept.printStackTrace();
+	    }
+	    return incomeData;
+	}
+
+
+
+
+
 	    private static void createConnection()
 	    {
 	        try
@@ -223,5 +303,6 @@ public class SQLStatements {
 	        }
 	        System.out.println("Found connection");
 	    }
+
 
 	}
