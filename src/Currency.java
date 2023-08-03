@@ -4,3 +4,4 @@ public class Currency {
 	public String name;
 	
 }
+//test
