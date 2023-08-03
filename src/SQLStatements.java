@@ -251,7 +251,7 @@ public class SQLStatements {
 	}
 
 
-	//test comment
+	
 	public static List<Object[]> selectIncomeByType(String type) {
 	    List<Object[]> incomeData = new ArrayList<>();
 	    try {
