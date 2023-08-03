@@ -23,19 +23,19 @@ public class DropDownCurrencyChange extends JFrame {
         dropdown.setPreferredSize(new Dimension(150, 20)); // Adjust the width and height according to your preference
 
         // Create if statement for options
-        dropdown.addActionListener(new ActionListener() {
+        dropdown.addActionListener(new ActionListener() { //options chosen but does not affect any other class 
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) dropdown.getSelectedItem();
                 String sym = DifferentCurrency.sym1;
                 if (selectedOption.equals(DifferentCurrency.cur1)) {
                     sym = DifferentCurrency.sym1;
-                    System.out.println("Option 1 selected. Performing action 1.");
+                    System.out.println("Currently using France version of currency.");
                 } else if (selectedOption.equals(DifferentCurrency.cur2)) {
                     sym = DifferentCurrency.sym2;
-                    System.out.println("Option 2 selected. Performing action 2.");
+                    System.out.println("Currently using Japanese version of currency.");
                 } else if (selectedOption.equals(DifferentCurrency.cur3)) {
                     sym = DifferentCurrency.sym3;
-                    System.out.println("Option 3 selected. Performing action 3.");
+                  System.out.println("Currently using US version of currency.");
                 }
             }
         });

@@ -26,7 +26,7 @@ public class DifferentCurrency
         Currency c2 = Currency.getInstance("JPY"); 
         Currency c3 = Currency.getInstance("USD");  
        
-  
+        // to test the output but is not necessary important to GUI function right now 
         System.out.println("France Symbol : "+c1.getSymbol());
         System.out.println("JPY Symbol : "+c2.getSymbol());
         System.out.println("USD Symbol : "+c3.getSymbol());
