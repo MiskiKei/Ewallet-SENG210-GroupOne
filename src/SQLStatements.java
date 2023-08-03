@@ -1,3 +1,4 @@
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,7 +19,13 @@ public class SQLStatements {
     
     
     public void createDatabase() {
-    	dbURLembedded = "jdbc:derby:data/myDB;create=true";
+    	dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
+    	
+    	String folderPath = "C:/seng210database/myDB";
+    	File folder = new File(folderPath);
+    	if (folder.exists() && folder.isDirectory() ) {
+    		 System.out.println("Database is already created");
+    	} else {
         try {
             Connection connection = DriverManager.getConnection(dbURLembedded);
 
@@ -38,9 +45,11 @@ public class SQLStatements {
         } catch (SQLException e) {
             e.printStackTrace();
             createConnection();
-            System.out.println("Database is already created");
+           
         }
+    	}
     }
+   
 
 	
 	public static void insertExpense(double amount, String type) { //pass variables for insert statement
