@@ -30,6 +30,8 @@ public class DifferentCurrency
         System.out.println("France Symbol : "+c1.getSymbol());
         System.out.println("JPY Symbol : "+c2.getSymbol());
         System.out.println("USD Symbol : "+c3.getSymbol());
+      
+   
         
   
     }
