@@ -122,7 +122,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
 
     public void readExpenseFile() {
         try {
-            File file = new File("C:/Users/Damian/git/Ewallet-SENG210-GroupOne/ExpenseFile.txt");
+        	File file = new File("src/ExpenseFile.txt");
             Scanner scnr = new Scanner(file);
             scnr.useDelimiter(",");
 

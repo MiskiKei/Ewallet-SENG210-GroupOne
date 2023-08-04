@@ -19,11 +19,17 @@ public class SQLStatements {
     
     
     public void createDatabase() {
-    	dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
     	
-    	String folderPath = "C:/seng210database/myDB";
+    	//dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
+    	
+    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
+    	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
+    	//String folderPath = "C:/seng210database/myDB";
+    	
+    	String folderPath = "/Users/lilyle/myDB";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
+    	createConnection();
     		 System.out.println("Database is already created");
     	} else {
         try {
@@ -40,6 +46,7 @@ public class SQLStatements {
             stmt.execute("INSERT INTO expense_type (type) VALUES ('Car Expenses'), ('Recreational'), ('Groceries'), ('Bills')");
             stmt.execute("INSERT INTO Income_type (type) VALUES ('Salary'), ('Bonus'), ('Investments'), ('Other')");
             
+           
             System.out.println("New database created");
             //create other tables here.
 
