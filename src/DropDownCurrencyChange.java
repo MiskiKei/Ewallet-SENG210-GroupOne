@@ -33,7 +33,7 @@ public class DropDownCurrencyChange extends JFrame {
     	convertLabel.setForeground(Color.black);
     	convertLabel.setVisible(true);
     	
-    	String[] currencyList = {"USD" + DifferentCurrency.sym3, "EUR", "JAP",};
+    	String[] currencyList = {"USD" + DifferentCurrency.sym3, "EUR" + DifferentCurrency.sym1 , "JAP" + DifferentCurrency.sym2,};
     	currSelectOne = new JComboBox(currencyList);
     	currSelectOne.setFont(new Font("Courier New", Font.PLAIN, 13));
     	currSelectOne.setBounds(450, 40, 60, 25);
