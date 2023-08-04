@@ -115,6 +115,7 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
         //totalExpense += amount;
 
         SQLStatements.insertExpense(amount, description);
+        JOptionPane.showMessageDialog(this, "Expense Was Successfully Added!");
         
         expenseAmountField.setText("");
         expenseDescriptionField.setText("");

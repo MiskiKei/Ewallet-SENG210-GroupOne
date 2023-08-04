@@ -146,29 +146,39 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         incomeField.setText("");		
     }
 
-
-	public void readIncomeFile() {
-        String month;
-        String incomeType;
-        String income;
-
+    public void readIncomeFile() {
         try {
-            File file = new File("IncomeFile");
+            File file = new File("src/IncomeFile.txt");
             Scanner scnr = new Scanner(file);
-            scnr.useDelimiter(",");
+
             while (scnr.hasNextLine()) {
-                income = scnr.next();
-                incomeType = scnr.next();
-                month = scnr.next();
-                incomeEntries.add(new IncomeEntry(month, incomeType, Double.parseDouble(income)));
+                String line = scnr.nextLine();
+                String[] parts = line.split(",");
+
+                if (parts.length == 3) {
+                    double amount = Double.parseDouble(parts[0].trim());
+                    String incomeType = parts[1].trim();
+                    String month = parts[2].trim();
+                    //add user here later
+                    
+                    SQLStatements.insertIncome(amount, incomeType, month);
+                } else {
+                    System.out.println("Invalid line: " + line);
+                }
             }
-            System.out.println("Success!");
+
+            JOptionPane.showMessageDialog(this, "Income Was Successfully Added!");
+            
             scnr.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred: File not found.");
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("An error occurred: Invalid number format.");
             e.printStackTrace();
         }
     }
+
 
     public String generateReport() {
         
