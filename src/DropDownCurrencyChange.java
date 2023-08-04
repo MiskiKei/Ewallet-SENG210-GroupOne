@@ -86,4 +86,29 @@ public class DropDownCurrencyChange extends JFrame {
         currLayout.add(currencyConv);
         currLayout.add(currResultLabel);
     }
+	
+	public void actionPerformed(ActionEvent e) {
+		    if(e.getSource()==currencyConv) { //converts currency
+		    	try {
+		    		Object selectedConversionOne = currSelectOne.getSelectedItem(); //getting the selected option
+		    		String currOne = selectedConversionOne.toString(); //converting to a string to pass variable
+		    		Object selectedConversionTwo = currSelectTwo.getSelectedItem();
+		    		String currTwo = selectedConversionTwo.toString();
+		    		
+		    		String ammountToConvert = convertText.getText();
+		    		double convertAmmount = Double.parseDouble(ammountToConvert);
+		    		//double converResults = Expenser.convertForeignCurrency(currOne, currTwo, convertAmmount);
+		    		//currResultLabel.setText(currTwo + ": " + converResults);
+		    		currResultLabel.setVisible(true);
+		    		}
+		    		catch (Exception exc) {
+		    			JOptionPane.showMessageDialog(null, "Please enter a valid submission.", "Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+	}
 }
+
+
+		    
+
+
