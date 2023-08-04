@@ -20,13 +20,13 @@ public class SQLStatements {
     
     public void createDatabase() {
     	
-    	//dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
+    	dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\MyDB2;create=true";
     	
-    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
+    	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
     	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
-    	//String folderPath = "C:/seng210database/myDB";
+    	String folderPath = "C:/seng210database/myDB2";
     	
-    	String folderPath = "/Users/lilyle/myDB";
+    	//String folderPath = "/Users/lilyle/myDB";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
     	createConnection();
@@ -58,7 +58,64 @@ public class SQLStatements {
     	}
     }
    
+//built in but never used as you don't really need to insert the income more than once 
+	public static void insertcurrency(double rate, String type ,String typename) {
+	    try {
+	       tableName = "Currency";
 
+	        if (type.equals("EUR")) {
+	        	typeID = 1;
+	        } else if (type.equals("JPY")) {
+	            typeID = 2;
+	        } else if (type.equals("USD")) {
+	            typeID = 3;
+	        } 
+
+	        stmt = conn.createStatement();
+	        stmt.execute("INSERT INTO " + tableName + " (typeid, currency_name, currency_rate) VALUES (" + typeID + ", '" + typename + "', '" + rate + "')");
+	        stmt.close();
+	        System.out.println("Currency Rates added successfully.");
+	    } catch (SQLException sqlExcept) {
+	        sqlExcept.printStackTrace();
+	        System.out.println("Failed to add currency values.");
+	    }
+	}
+	
+	
+	public static Object[] selectCurrencyByType(String type) {
+	    try {
+	    	   if (type.equals("EUR")) {
+		        	typeID = 1;
+		        } else if (type.equals("JPY")) {
+		            typeID = 2;
+		        } else if (type.equals("USD")) {
+		            typeID = 3;
+		        } 
+	        stmt = conn.createStatement();
+	        tableName = "Currency";
+	        String query = "SELECT typeid, currency_name, currency_rate FROM currency " ;
+	        System.out.println(query);
+	        ResultSet results = stmt.executeQuery(query);
+	        Object[] returnQuery = new Object[3]; //return the results
+	        // Check if the result set contains data
+	        while (results.next()) {
+	        // Process the data in the result set
+	        String typeName = results.getString(1);
+	        String currName = results.getString(2);
+	        String expectedRate = results.getString(3);
+	        returnQuery[0] = typeName;
+	        returnQuery[1] = currName;
+	        returnQuery[2] = expectedRate;
+	        System.out.println(typeName + currName + expectedRate);
+	        return returnQuery;
+	        }
+	        results.close();
+	        stmt.close();
+	    } catch (SQLException sqlExcept) {
+	        sqlExcept.printStackTrace();
+	    }
+        return null;
+	}
 	
 	public static void insertExpense(double amount, String type) { //pass variables for insert statement
 	        try
