@@ -69,20 +69,13 @@ public class SQLStatements {
 		        } 
 	        stmt = conn.createStatement();
 	        tableName = "Currency";
-	        String query = "SELECT typeid, currency_name, currency_rate FROM currency " ;
+	        String query = "SELECT currency_rate from CURRENCY" ;
 	        System.out.println(query);
-	        ResultSet results = stmt.executeQuery(query);
-	        Object[] returnQuery = new Object[3]; //return the results
-	        // Check if the result set contains data
+	        ResultSet results = stmt.executeQuery("SELECT currency_rate from" + tableName + "where typeid = " + type);
 	        while (results.next()) {
 	        // Process the data in the result set
-	        String typeName = results.getString(1);
-	        String currName = results.getString(2);
-	        String expectedRate = results.getString(3);
-	        returnQuery[0] = typeName;
-	        returnQuery[1] = currName;
-	        returnQuery[2] = expectedRate;
-	        System.out.println(typeName + currName + expectedRate);
+	        String expectedRate = results.getString("currency_rate");  
+	        System.out.println( expectedRate);
 	        return expectedRate;
 	        }
 	        results.close();

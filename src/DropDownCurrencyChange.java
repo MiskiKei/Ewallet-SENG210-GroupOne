@@ -70,7 +70,7 @@ public class DropDownCurrencyChange extends JFrame {
     	currResultLabel.setBounds(350, 200, 200, 25);
     	currResultLabel.setFont(new Font("Courier New", Font.PLAIN, 17));
     	currResultLabel.setForeground(Color.red);
-    	currResultLabel.setVisible(false);
+    	currResultLabel.setVisible(true);
 
         
         currLayout.setBounds(0, 0, 850, 300);
@@ -101,16 +101,16 @@ public class DropDownCurrencyChange extends JFrame {
 		    		double endrate = Double.parseDouble(SQLStatements.selectCurrencyByType(currOne));
 		    		double convertResults = (convertAmmount * endrate )/ startrate;
 		    		
-		    		if (currSelectTwo.getSelectedIndex()== 0)
+		    		if (currSelectOne.getSelectedIndex()== 0)
 		    		{
 		    			currResultLabel.setText( DifferentCurrency.sym3 + ": " + convertResults);
 		    			currResultLabel.setVisible(true);
 		    		}
-		    		else if(currSelectTwo.getSelectedIndex()== 1) {
+		    		else if(currSelectOne.getSelectedIndex()== 1) {
 		    			currResultLabel.setText( DifferentCurrency.sym1 + ": " + convertResults);
 			    		currResultLabel.setVisible(true);
 		    		}
-		    		else if(currSelectTwo.getSelectedIndex()== 2){
+		    		else if(currSelectOne.getSelectedIndex()== 2){
 		    			currResultLabel.setText( DifferentCurrency.sym2 + ": " + convertResults);
 			    		currResultLabel.setVisible(true);
 		    		}
