@@ -66,11 +66,11 @@ public class DropDownCurrencyChange extends JFrame {
     	convertedLabel.setVisible(true);
     	
     	currResultLabel = new JLabel();
-    	currResultLabel.setText(DifferentCurrency.sym3 + "0.00");
+    	currResultLabel.setText("");
     	currResultLabel.setBounds(350, 200, 200, 25);
     	currResultLabel.setFont(new Font("Courier New", Font.PLAIN, 17));
     	currResultLabel.setForeground(Color.red);
-    	currResultLabel.setVisible(true);
+    	currResultLabel.setVisible(false);
 
         
         currLayout.setBounds(0, 0, 850, 300);
@@ -97,12 +97,24 @@ public class DropDownCurrencyChange extends JFrame {
 		    		
 		    		String ammountToConvert = convertText.getText();
 		    		double convertAmmount = Double.parseDouble(ammountToConvert);
-		    		SQLStatements.selectCurrencyByType(currTwo);
-		    		SQLStatements.selectCurrencyByType(currOne);
-		    		//double converResults = Expenser.convertForeignCurrency(currOne, currTwo, convertAmmount);
-		    		//currResultLabel.setText(currTwo + ": " + converResults);
-		    		currResultLabel.setVisible(true);
+		    		double startrate = Double.parseDouble(SQLStatements.selectCurrencyByType(currTwo));
+		    		double endrate = Double.parseDouble(SQLStatements.selectCurrencyByType(currOne));
+		    		double convertResults = (convertAmmount * endrate )/ startrate;
+		    		
+		    		if (currSelectTwo.getSelectedIndex()== 0)
+		    		{
+		    			currResultLabel.setText( DifferentCurrency.sym3 + ": " + convertResults);
+		    			currResultLabel.setVisible(true);
 		    		}
+		    		else if(currSelectTwo.getSelectedIndex()== 1) {
+		    			currResultLabel.setText( DifferentCurrency.sym1 + ": " + convertResults);
+			    		currResultLabel.setVisible(true);
+		    		}
+		    		else if(currSelectTwo.getSelectedIndex()== 2){
+		    			currResultLabel.setText( DifferentCurrency.sym2 + ": " + convertResults);
+			    		currResultLabel.setVisible(true);
+		    		}
+		    	   }
 		    		catch (Exception exc) {
 		    			JOptionPane.showMessageDialog(null, "Please enter a valid submission.", "Error", JOptionPane.INFORMATION_MESSAGE);
 				}
