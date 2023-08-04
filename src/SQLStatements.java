@@ -45,7 +45,7 @@ public class SQLStatements {
             stmt.execute("CREATE TABLE expense (Expense_id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, amount DECIMAL(10, 2), typeid INT, userid VARCHAR(255), FOREIGN KEY (typeid) REFERENCES expense_type(typeid))");
             stmt.execute("INSERT INTO expense_type (type) VALUES ('Car Expenses'), ('Recreational'), ('Groceries'), ('Bills')");
             stmt.execute("INSERT INTO Income_type (type) VALUES ('Salary'), ('Bonus'), ('Investments'), ('Other')");
-            
+            stmt.execute("INSERT INTO currency (type) VALUES ( 'European Euro', 0.91), ( 'Japanese Yen', 142.76), ('US Dollar' , 1.00)"); 
            
             System.out.println("New database created");
             //create other tables here.
@@ -58,30 +58,6 @@ public class SQLStatements {
     	}
     }
    
-//built in but never used as you don't really need to insert the income more than once 
-	public static void insertcurrency(double rate, String type ,String typename) {
-	    try {
-	       tableName = "Currency";
-
-	        if (type.equals("EUR")) {
-	        	typeID = 1;
-	        } else if (type.equals("JPY")) {
-	            typeID = 2;
-	        } else if (type.equals("USD")) {
-	            typeID = 3;
-	        } 
-
-	        stmt = conn.createStatement();
-	        stmt.execute("INSERT INTO " + tableName + " (typeid, currency_name, currency_rate) VALUES (" + typeID + ", '" + typename + "', '" + rate + "')");
-	        stmt.close();
-	        System.out.println("Currency Rates added successfully.");
-	    } catch (SQLException sqlExcept) {
-	        sqlExcept.printStackTrace();
-	        System.out.println("Failed to add currency values.");
-	    }
-	}
-	
-	
 	public static Object[] selectCurrencyByType(String type) {
 	    try {
 	    	   if (type.equals("EUR")) {

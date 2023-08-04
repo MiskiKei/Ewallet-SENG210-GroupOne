@@ -97,6 +97,8 @@ public class DropDownCurrencyChange extends JFrame {
 		    		
 		    		String ammountToConvert = convertText.getText();
 		    		double convertAmmount = Double.parseDouble(ammountToConvert);
+		    		SQLStatements.selectCurrencyByType(currTwo);
+		    		SQLStatements.selectCurrencyByType(currOne);
 		    		//double converResults = Expenser.convertForeignCurrency(currOne, currTwo, convertAmmount);
 		    		//currResultLabel.setText(currTwo + ": " + converResults);
 		    		currResultLabel.setVisible(true);

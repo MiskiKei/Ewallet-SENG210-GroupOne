@@ -30,9 +30,8 @@ public class DifferentCurrency
         System.out.println("France Symbol : "+c1.getSymbol());
         System.out.println("JPY Symbol : "+c2.getSymbol());
         System.out.println("USD Symbol : "+c3.getSymbol());
-      //SQLStatements.insertcurrency( 1.00, "USD", "US Dollar");
-      //SQLStatements.insertCurrency(0.91, "EUR" ,"European Euro");
-      //SQLStatements.insertCurrency(142.76, "JPY" ,"Japanese Yen");
+      
+   
         
   
     }
