@@ -20,11 +20,11 @@ public class SQLStatements {
     
     public void createDatabase() {
     	
-    	dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\MyDB3;create=true";
+    	dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\finaltestor2;create=true";
     	
     	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
     	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
-    	String folderPath = "C:/seng210database/myDB3";
+    	String folderPath = "C:/seng210database/finaltestor2";
     	
     	//String folderPath = "/Users/lilyle/myDB";
     	File folder = new File(folderPath);
@@ -37,7 +37,7 @@ public class SQLStatements {
 
             createConnection();
             stmt = conn.createStatement();
-            stmt.execute("CREATE TABLE currency (typeid INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)PRIMARY KEY, currency_name VARCHAR(50), currency_rate DECIMAL(10,2))"); 
+            stmt.execute("CREATE TABLE currency (typeid INT PRIMARY KEY, currency_name VARCHAR(50), currency_rate DECIMAL(10,2))"); 
             stmt.execute("CREATE TABLE users ( id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), username VARCHAR(50) NOT NULL, password VARCHAR(100) NOT NULL, PRIMARY KEY (id), UNIQUE (username) )");
             stmt.execute("CREATE TABLE Income_type (typeid INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, type VARCHAR(50)) ");
             stmt.execute("CREATE TABLE income (Income_id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, amount DECIMAL(10, 2), typeid INT, month VARCHAR(50), userid VARCHAR(255), FOREIGN KEY (typeid) REFERENCES income_type(typeid))"); 
@@ -45,7 +45,7 @@ public class SQLStatements {
             stmt.execute("CREATE TABLE expense (Expense_id INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY, amount DECIMAL(10, 2), typeid INT, userid VARCHAR(255), FOREIGN KEY (typeid) REFERENCES expense_type(typeid))");
             stmt.execute("INSERT INTO expense_type (type) VALUES ('Car Expenses'), ('Recreational'), ('Groceries'), ('Bills')");
             stmt.execute("INSERT INTO Income_type (type) VALUES ('Salary'), ('Bonus'), ('Investments'), ('Other')");
-            stmt.execute("INSERT INTO currency (typeid) VALUES ( 'European Euro', 0.91), ( 'Japanese Yen', 142.76), ('US Dollar' , 1.00)"); 
+            stmt.execute("INSERT INTO currency VALUES ( 1,'European Euro', 0.91), (2, 'Japanese Yen', 142.76), (3,'US Dollar' , 1.00)"); 
            
             System.out.println("New database created");
             //create other tables here.
