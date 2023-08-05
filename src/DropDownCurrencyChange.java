@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.JFrame;
 
-public class DropDownCurrencyChange extends JFrame {
+public class DropDownCurrencyChange extends JFrame implements ActionListener{
    
 	private static JPanel currLayout = new JPanel();
 	private static JLabel convertLabel = new JLabel();
@@ -55,7 +55,7 @@ public class DropDownCurrencyChange extends JFrame {
     	currencyConv.setFont(new Font("Courier New", Font.PLAIN, 13));
     	currencyConv.setBounds(300, 100, 200, 25);
     	currencyConv.setFocusable(false);
-    	//currencyConv.addActionListener(this);
+    	currencyConv.addActionListener(this);
     	currencyConv.setVisible(true);
     	
     	convertedLabel = new JLabel();
