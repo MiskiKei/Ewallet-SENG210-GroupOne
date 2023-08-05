@@ -35,7 +35,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        monthEstimatorButton = new JButton("Month Estimator");
+        monthEstimatorButton = new JButton("Save For Item");
         monthEstimatorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeCurrentFrame(); // Close the current frame

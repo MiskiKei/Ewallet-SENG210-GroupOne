@@ -20,13 +20,17 @@ public class SQLStatements {
     
     public void createDatabase() {
     	
-    	dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\finaltestor2;create=true";
+    	//dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\finaltestor2;create=true"; //CATHY
     	
-    	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
-    	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
-    	String folderPath = "C:/seng210database/finaltestor2";
+    	//dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true"; //GROUP
     	
-    	//String folderPath = "/Users/lilyle/myDB";
+    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
+   
+    	//String folderPath = "C:/seng210database/finaltestor2"; //CATHY
+    	
+    	//String folderPath = "C:/seng210database/myDB"; //GROUP 
+    	
+    	String folderPath = "/Users/lilyle/myDB_Ewallet";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
     	createConnection();
