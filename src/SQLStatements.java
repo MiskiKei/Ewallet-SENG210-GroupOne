@@ -59,33 +59,33 @@ public class SQLStatements {
     }
    
 	public static String selectCurrencyByType(String type) {
-	    try {
-	    	   if (type.equals("EUR")) {
-		        	typeID = 1;
-		        } else if (type.equals("JPY")) {
-		            typeID = 2;
-		        } else if (type.equals("USD")) {
-		            typeID = 3;
-		        } 
-	        stmt = conn.createStatement();
-	        tableName = "Currency";
-	        String query = "SELECT currency_rate from CURRENCY" ;
-	        System.out.println(query);
-	        ResultSet results = stmt.executeQuery("SELECT currency_rate from" + tableName + "where typeid = " + type);
-	        while (results.next()) {
-	        // Process the data in the result set
-	        String expectedRate = results.getString("currency_rate");  
-	        System.out.println( expectedRate);
-	        return expectedRate;
-	        }
-	        results.close();
-	        stmt.close();
-	    } catch (SQLException sqlExcept) {
-	        sqlExcept.printStackTrace();
-	    }
+        try {
+               if (type.equals("EUR")) {
+                    typeID = 1;
+                } else if (type.equals("JPY")) {
+                    typeID = 2;
+                } else if (type.equals("USD")) {
+                    typeID = 3;
+                }
+                stmt = conn.createStatement();
+                String tableName = "Currency";
+                String query = "SELECT currency_rate FROM " + tableName + " WHERE typeid = " + typeID;
+                System.out.println(query);
+                ResultSet results = stmt.executeQuery(query);
+            while (results.next()) {
+            // Process the data in the result set
+            String expectedRate = results.getString("currency_rate");  
+            System.out.println( expectedRate);
+            return expectedRate;
+            }
+            results.close();
+            stmt.close();
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
         return null;
-	}
-	
+
+    }
 	public static void insertExpense(double amount, String type) { //pass variables for insert statement
 	        try
 	        {
