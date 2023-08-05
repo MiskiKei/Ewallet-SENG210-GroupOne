@@ -1,6 +1,7 @@
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -18,13 +19,13 @@ public class SQLStatements {
     
     
     
-    public void createDatabase() {
+    public static void createDatabase() {
     	
-    	dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\finaltestor2;create=true";
+    	dbURLembedded = "jdbc:derby:C:\\Users\\snave\\finaltestor2;create=true";
     	
     	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
     	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
-    	String folderPath = "C:/seng210database/finaltestor2";
+    	String folderPath = "C:\\Users\\snave\\finaltestor2";
     	
     	//String folderPath = "/Users/lilyle/myDB";
     	File folder = new File(folderPath);
@@ -58,6 +59,44 @@ public class SQLStatements {
     	}
     }
    
+    public static boolean login(String username, String password) {
+        try {
+        	createDatabase();
+        	
+            stmt = conn.createStatement();
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet results = preparedStatement.executeQuery();
+            boolean success = results.next();
+            results.close();
+            stmt.close();
+            return success;
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean createUser(String username, String password) {
+        try {
+        	createDatabase();
+        	
+            stmt = conn.createStatement();
+            String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            int rowsAffected = preparedStatement.executeUpdate();
+            stmt.close();
+            return rowsAffected > 0;
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        return false;
+    }
+    
 	public static String selectCurrencyByType(String type) {
 	    try {
 	    	   if (type.equals("EUR")) {
