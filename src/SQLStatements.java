@@ -21,13 +21,16 @@ public class SQLStatements {
     
     public static void createDatabase() {
     	
-    	dbURLembedded = "jdbc:derby:C:\\Users\\snave\\finaltestor2;create=true";
+
+
     	
-    	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB;create=true";
-    	///Users/lilyle/git/Ewallet-SENG210-GroupOne/
-    	String folderPath = "C:\\Users\\snave\\finaltestor2";
+    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
+   
+    	//String folderPath = "C:/seng210database/finaltestor2"; //CATHY
     	
-    	//String folderPath = "/Users/lilyle/myDB";
+    	//String folderPath = "C:/seng210database/myDB"; //GROUP 
+    	
+    	String folderPath = "/Users/lilyle/myDB_Ewallet";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
     	createConnection();
@@ -98,33 +101,33 @@ public class SQLStatements {
     }
     
 	public static String selectCurrencyByType(String type) {
-	    try {
-	    	   if (type.equals("EUR")) {
-		        	typeID = 1;
-		        } else if (type.equals("JPY")) {
-		            typeID = 2;
-		        } else if (type.equals("USD")) {
-		            typeID = 3;
-		        } 
-	        stmt = conn.createStatement();
-	        tableName = "Currency";
-	        String query = "SELECT currency_rate from CURRENCY" ;
-	        System.out.println(query);
-	        ResultSet results = stmt.executeQuery("SELECT currency_rate from" + tableName + "where typeid = " + type);
-	        while (results.next()) {
-	        // Process the data in the result set
-	        String expectedRate = results.getString("currency_rate");  
-	        System.out.println( expectedRate);
-	        return expectedRate;
-	        }
-	        results.close();
-	        stmt.close();
-	    } catch (SQLException sqlExcept) {
-	        sqlExcept.printStackTrace();
-	    }
+        try {
+               if (type.equals("EUR")) {
+                    typeID = 1;
+                } else if (type.equals("JPY")) {
+                    typeID = 2;
+                } else if (type.equals("USD")) {
+                    typeID = 3;
+                }
+                stmt = conn.createStatement();
+                String tableName = "Currency";
+                String query = "SELECT currency_rate FROM " + tableName + " WHERE typeid = " + typeID;
+                System.out.println(query);
+                ResultSet results = stmt.executeQuery(query);
+            while (results.next()) {
+            // Process the data in the result set
+            String expectedRate = results.getString("currency_rate");  
+            System.out.println( expectedRate);
+            return expectedRate;
+            }
+            results.close();
+            stmt.close();
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
         return null;
-	}
-	
+
+    }
 	public static void insertExpense(double amount, String type) { //pass variables for insert statement
 	        try
 	        {
