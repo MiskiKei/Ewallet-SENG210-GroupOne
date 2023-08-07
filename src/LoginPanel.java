@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
-
+    public static String username;
     public LoginPanel() {
         setLayout(new GridLayout(3, 2));
         usernameField = new JTextField(20);
@@ -22,7 +22,7 @@ public class LoginPanel extends JPanel {
     }
 
     public boolean login() {
-        String username = usernameField.getText();
+        username = usernameField.getText();
         String password = new String(passwordField.getPassword());
         return SQLStatements.login(username, password);
     }
@@ -31,6 +31,9 @@ public class LoginPanel extends JPanel {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
         return SQLStatements.createUser(username, password);
+    }
+    public static String getUser() {
+    	return username;
     }
 }
 
