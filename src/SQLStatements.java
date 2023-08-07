@@ -22,15 +22,15 @@ public class SQLStatements {
     public static void createDatabase() {
     	
 
-
+    	dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
     	
-    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
+    	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
    
     	//String folderPath = "C:/seng210database/finaltestor2"; //CATHY
     	
-    	//String folderPath = "C:/seng210database/myDB"; //GROUP 
+    	String folderPath = "C:/seng210database/myDB"; //GROUP 
     	
-    	String folderPath = "/Users/lilyle/myDB_Ewallet";
+    	//String folderPath = "/Users/lilyle/myDB_Ewallet";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
     	createConnection();
@@ -141,8 +141,9 @@ public class SQLStatements {
 	        	} else if (type.equals("Bills")) {
 	        		typeID = 4;
 	        	}
+	        	String username = LoginPanel.getUser();
 	            stmt = conn.createStatement();
-	            stmt.execute("INSERT INTO expense (amount, typeid, userid) VALUES (" + amount + ",  " + typeID + ", 'USER')");
+	            stmt.execute("INSERT INTO expense (amount, typeid, userid) VALUES (" + amount + ",  " + typeID + ", '" + username + "')");
 	            stmt.close();
 	            System.out.println("added");
 	        }
@@ -189,7 +190,8 @@ public class SQLStatements {
         	}
 	        stmt = conn.createStatement();
 	        tableName = "Expense";
-	        ResultSet results = stmt.executeQuery("Select Expense_id FROM " + tableName + " where typeid = " + typeID);
+        	String username = LoginPanel.getUser();
+	        ResultSet results = stmt.executeQuery("Select Expense_id FROM " + tableName + " where typeid = " + typeID + " and userid = '" + username + "'");
 	        List<String> columnValues = new ArrayList<>();
 	        while (results.next()) {
                 String value = results.getString("Expense_id");
@@ -221,7 +223,8 @@ public class SQLStatements {
         	}
 	        stmt = conn.createStatement();
 	        tableName = "Expense";
-	        String query = "SELECT et.type, ex.amount, ex.userid FROM expense ex left join expense_type et on ex.typeid = et.typeid where ex.expense_id = " + type;
+	        String username = LoginPanel.getUser();
+	        String query = "SELECT et.type, ex.amount, ex.userid FROM expense ex left join expense_type et on ex.typeid = et.typeid where ex.expense_id = " + type + " and userid = '" + username + "'";
 	        System.out.println(query);
 	        ResultSet results = stmt.executeQuery(query);
 	        Object[] returnQuery = new Object[3]; //return the results
