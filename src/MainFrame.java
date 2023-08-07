@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
     	SQLStatements Database = new SQLStatements();
-    	Database.createDatabase();
+//    	Database.createDatabase();
         setTitle("Wallet");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -128,14 +128,47 @@ public class MainFrame extends JFrame {
         }
     }
 
+    public static boolean showLoginBox() {
+    	boolean isLoggedIn = false;
+        LoginPanel loginPanel = new LoginPanel();
+        int option = JOptionPane.showOptionDialog(
+            null,
+            loginPanel,
+            "Login or Create Account",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            new String[]{"Login", "Create Account"},
+            "Login"
+        );
+
+        if (option == 0) { // "Login" button clicked
+            boolean loggedIn = loginPanel.login();
+            if (loggedIn) {
+                SwingUtilities.invokeLater(() -> new MainFrame());
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (option == 1) { // "Create Account" button clicked
+            boolean created = loginPanel.createAccount();
+            if (created) {
+                SwingUtilities.invokeLater(() -> new MainFrame());
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to create account.", "Account Creation Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        } else { // Dialog closed or canceled
+            System.exit(0);
+        }
+        return isLoggedIn;
+    }
+    
     public static class Main {
         public static void main(String[] args) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    new MainFrame();
-                }
-            });
+        	if(showLoginBox()) {
+                SwingUtilities.invokeLater(() -> {
+                    MainFrame mainFrame = new MainFrame();
+                });
+        	}
         }
-
     }
 }

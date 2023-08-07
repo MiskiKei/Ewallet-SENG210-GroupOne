@@ -1,6 +1,7 @@
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -18,11 +19,10 @@ public class SQLStatements {
     
     
     
-    public void createDatabase() {
+    public static void createDatabase() {
     	
-    	//dbURLembedded = "jdbc:derby:C:\\Users\\Cathy\\finaltestor2;create=true"; //CATHY
-    	
-    	//dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true"; //GROUP
+
+
     	
     	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
    
@@ -62,6 +62,44 @@ public class SQLStatements {
     	}
     }
    
+    public static boolean login(String username, String password) {
+        try {
+        	createDatabase();
+        	
+            stmt = conn.createStatement();
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet results = preparedStatement.executeQuery();
+            boolean success = results.next();
+            results.close();
+            stmt.close();
+            return success;
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean createUser(String username, String password) {
+        try {
+        	createDatabase();
+        	
+            stmt = conn.createStatement();
+            String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            int rowsAffected = preparedStatement.executeUpdate();
+            stmt.close();
+            return rowsAffected > 0;
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        return false;
+    }
+    
 	public static String selectCurrencyByType(String type) {
         try {
                if (type.equals("EUR")) {
