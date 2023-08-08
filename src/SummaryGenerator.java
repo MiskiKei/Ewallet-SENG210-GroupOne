@@ -48,6 +48,7 @@ public class SummaryGenerator extends JFrame {
         double totalIncome = calculateTotalIncome();
         double totalExpenses = expenseTracker.totalExpense;
         double savingsAmount = totalIncome - totalExpenses;
+        double totalyeartodate = savingsAmount* 12;
 
         StringBuilder summary = new StringBuilder();
         summary.append("Summary:\n");
@@ -55,6 +56,7 @@ public class SummaryGenerator extends JFrame {
         summary.append("Total Income: $").append(totalIncome).append("\n");
         summary.append("Total Expenses: $").append(totalExpenses).append("\n");
         summary.append("Savings Amount: $").append(savingsAmount).append("\n");
+        summary.append("Total to date: $").append(totalyeartodate).append("\n");
         summary.append("----------------------\n");
 
         JOptionPane.showMessageDialog(this, summary.toString(), "Summary", JOptionPane.PLAIN_MESSAGE);
