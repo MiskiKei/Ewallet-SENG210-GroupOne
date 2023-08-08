@@ -22,15 +22,15 @@ public class SQLStatements {
     public static void createDatabase() {
     	
 
-    	dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
+    	//dbURLembedded = "jdbc:derby:C:/seng210database/myDB;create=true";
     	
-    	//dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
+    	dbURLembedded = "jdbc:derby:/Users/lilyle/myDB_Ewallet;create=true";
    
     	//String folderPath = "C:/seng210database/finaltestor2"; //CATHY
     	
-    	String folderPath = "C:/seng210database/myDB"; //GROUP 
+    	//String folderPath = "C:/seng210database/myDB"; //GROUP 
     	
-    	//String folderPath = "/Users/lilyle/myDB_Ewallet";
+    	String folderPath = "/Users/lilyle/myDB_Ewallet";
     	File folder = new File(folderPath);
     	if (folder.exists() && folder.isDirectory() ) {
     	createConnection();
@@ -287,7 +287,7 @@ public class SQLStatements {
         return null;
 	}
 
-	
+   
 	public static void insertIncome(double amount, String type, String month) {
 	    try {
 	       tableName = "Income";
@@ -301,9 +301,12 @@ public class SQLStatements {
 	        } else if (type.equals("Other")) {
 	            typeID = 4;
 	        }
-
+	        String username = LoginPanel.getUser();
 	        stmt = conn.createStatement();
-	        stmt.execute("INSERT INTO " + tableName + " (amount, typeid, month, userid) VALUES (" + amount + ", " + typeID + ", '" + month + "', 'USER')");
+	        String query = ("INSERT INTO " + tableName + " (amount, typeid, month, userid) VALUES (" + amount + ", " + typeID + ", '" + month + "', '" + username + "')");
+	        System.out.println(query);
+	        Statement stmt = conn.createStatement();
+	        stmt.execute(query);
 	        stmt.close();
 	        System.out.println("Income added successfully.");
 	    } catch (SQLException sqlExcept) {
@@ -312,13 +315,13 @@ public class SQLStatements {
 	    }
 	}
 	
-	
 	public static List<Object[]> selectAllIncome() {
 	    List<Object[]> incomeData = new ArrayList<>();
 	    try {
 	        stmt = conn.createStatement();
 	        String tableName = "Income";
-	        String query = "SELECT it.type, inc.amount, inc.month, inc.userid FROM income inc LEFT JOIN income_type it ON inc.typeid = it.typeid"; // Removed "AS in" alias
+	        String username = LoginPanel.getUser();
+	        String query = "SELECT it.type, inc.amount, inc.month, inc.userid FROM income inc LEFT JOIN income_type it ON inc.typeid = it.typeid WHERE userid = '" + username + "'";
 	        System.out.println(query);
 	        ResultSet results = stmt.executeQuery(query);
 	        while (results.next()) {
@@ -327,6 +330,7 @@ public class SQLStatements {
 	            String monthName = results.getString(3);
 	            String userName = results.getString(4);
 	            Object[] rowResults = new Object[] { typeName, amountName, monthName, userName };
+	            System.out.println(rowResults );
 	            incomeData.add(rowResults);
 	        }
 	        results.close();
@@ -353,7 +357,7 @@ public class SQLStatements {
 	            String monthName = results.getString(3);
 	            String userName = results.getString(4);
 	            Object[] rowResults = new Object[] { typeName, amountName, monthName, userName };
-	            incomeData.add(rowResults); // Add the rowResults array to the incomeData list
+	            incomeData.add(rowResults); 
 	        }
 	        results.close();
 	        stmt.close();
