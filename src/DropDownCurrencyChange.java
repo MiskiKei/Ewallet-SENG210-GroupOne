@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 import javax.swing.*;
 import javax.swing.JFrame;
@@ -94,12 +95,15 @@ public class DropDownCurrencyChange extends JFrame implements ActionListener{
 		    		String currOne = selectedConversionOne.toString(); //converting to a string to pass variable
 		    		Object selectedConversionTwo = currSelectTwo.getSelectedItem();
 		    		String currTwo = selectedConversionTwo.toString();
+		    	
 		    		
 		    		String ammountToConvert = convertText.getText();
 		    		double convertAmmount = Double.parseDouble(ammountToConvert);
 		    		double startrate = Double.parseDouble(SQLStatements.selectCurrencyByType(currTwo));
 		    		double endrate = Double.parseDouble(SQLStatements.selectCurrencyByType(currOne));
-		    		double convertResults = (convertAmmount * endrate )/ startrate;
+		    		double convertResults =(convertAmmount * endrate )/ startrate;
+		    		DecimalFormat df = new DecimalFormat("#.##");
+		    		convertResults = Double.valueOf(df.format(convertResults));
 		    		
 		    		if (currSelectOne.getSelectedIndex()== 0)
 		    		{
