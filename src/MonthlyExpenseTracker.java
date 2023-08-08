@@ -112,9 +112,10 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
 
         //Expense expense = new Expense(amount, description);
         //expenses.add(expense);
-        //totalExpense += amount;
+        
 
         SQLStatements.insertExpense(amount, description);
+        totalExpense += amount;
         JOptionPane.showMessageDialog(this, "Expense Was Successfully Added!");
         
         expenseAmountField.setText("");
@@ -141,13 +142,13 @@ public class MonthlyExpenseTracker extends JFrame implements ActionListener {
                     
                    
                     totalExpense += amount;
-                    System.out.println("done");
+                    //System.out.println("done");
                 } else {
                     System.out.println("Invalid line: " + line);
                 }
             }
 
-            System.out.println("Success!");
+            //System.out.println("Success!");
             generateReport();
             scnr.close();
         } catch (FileNotFoundException e) {

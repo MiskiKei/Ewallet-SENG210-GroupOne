@@ -19,7 +19,7 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
     private JComboBox<String> monthComboBox;
     private JComboBox<String> incomeTypeComboBox;
     public ArrayList<IncomeEntry> incomeEntries;
-
+    public double totalIncome;
     static class IncomeEntry {
         private String month;
         private String type;
@@ -138,8 +138,9 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
         }   
         
         SQLStatements.insertIncome(amount, incomeType, month); 
+        totalIncome += amount;
         
-        System.out.println("Income added successfully to the database!");
+       // System.out.println("Income added successfully to the database!");
         
         JOptionPane.showMessageDialog(this, "Income Was Successfully Added!");
 
@@ -162,6 +163,7 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
                     //add user here later
                     
                     SQLStatements.insertIncome(amount, incomeType, month);
+                    totalIncome += amount;
                 } else {
                     System.out.println("Invalid line: " + line);
                 }

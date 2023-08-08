@@ -45,18 +45,18 @@ public class SummaryGenerator extends JFrame {
     }
 
     private void showSummary() {
-        double totalIncome = calculateTotalIncome();
+        double totalIncome = incomeTracker.totalIncome;
         double totalExpenses = expenseTracker.totalExpense;
         double savingsAmount = totalIncome - totalExpenses;
-        double totalyeartodate = savingsAmount* 12;
+        //double totalyeartodate = savingsAmount* 12;
 
         StringBuilder summary = new StringBuilder();
         summary.append("Summary:\n");
         summary.append("----------------------\n");
         summary.append("Total Income: $").append(totalIncome).append("\n");
         summary.append("Total Expenses: $").append(totalExpenses).append("\n");
-        summary.append("Savings Amount: $").append(savingsAmount).append("\n");
-        summary.append("Total to date: $").append(totalyeartodate).append("\n");
+        summary.append("Year to date: $").append(savingsAmount).append("\n");
+        //summary.append("Total to date: $").append(totalyeartodate).append("\n");
         summary.append("----------------------\n");
 
         JOptionPane.showMessageDialog(this, summary.toString(), "Summary", JOptionPane.PLAIN_MESSAGE);
