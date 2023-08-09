@@ -164,12 +164,15 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
                     
                     SQLStatements.insertIncome(amount, incomeType, month);
                     totalIncome += amount;
+                    JOptionPane.showMessageDialog(this, "         IncomeFile.txt Was Successfully Added! \n \n Income Type: " + incomeType + " - Amount: " + "($ " + amount + ") " + " - Month: " + month);
                 } else {
                     System.out.println("Invalid line: " + line);
                 }
+                
             }
 
-            JOptionPane.showMessageDialog(this, "Income Was Successfully Added!");
+            
+			
             
             scnr.close();
         } catch (FileNotFoundException e) {
@@ -230,7 +233,7 @@ public class MonthlyIncomeTracker extends JFrame implements ActionListener {
                 totalIncome += addAmount;
                 String objMonth = (String) rowresults[2];
                 String objUser = (String) rowresults[3];
-                report.append("Income Type: " + objType + " ($" + objAmount + ") - Month: " + objMonth + " - User: " + objUser + "\n");
+                report.append("Income Type: " + objType + " ($" + objAmount + ") - Month: " + objMonth + "\n");
             }
         }
 
